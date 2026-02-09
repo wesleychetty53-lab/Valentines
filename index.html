@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Valentine 💘</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      button {
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script>
+      const { useState } = React;
+
+      const NO_PHRASES = [
+        "No",
+        "Please mamas? 🥺",
+        "come on say yes 💔",
+        "Just say you hate me 🥹",
+        "I'll let you touch my bum 😭",
+        "I know you want me so just say yes 😔",
+      ];
+
+      function App() {
+        const [noCount, setNoCount] = useState(0);
+        const [accepted, setAccepted] = useState(false);
+        const [noPos, setNoPos] = useState({ x: 0, y: 0 });
+
+        const yesSize = 16 + noCount * 12;
+
+        const moveNoButton = () => {
+          const x = Math.random() * 200 - 100;
+          const y = Math.random() * 200 - 100;
+          setNoPos({ x, y });
+          setNoCount((n) => n + 1);
+        };
+
+        const handleYes = () => {
+          setAccepted(true);
+
+          // sound
+          new Audio("https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3").play();
+
+          // confetti
+          confetti({
+            particleCount: 150,
+            spread: 90,
+            origin: { y: 0.6 },
+          });
+        };
+
+        return (
+          React.createElement(
+            "div",
+            {
+              style: {
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              },
+            },
+            !accepted
+              ? React.createElement(
+                  React.Fragment,
+                  null,
+                  React.createElement("img", {
+                    src: "https://media.tenor.com/RmLwA13UIOIAAAAC/pengu-pudgy.gif",
+                    width: 200,
+                  }),
+                  React.createElement("h1", null, "Will you be my Valentine? 💘"),
+                  React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: handleYes,
+                        style: {
+                          fontSize: yesSize + "px",
+                          padding: "10px 20px",
+                          margin: "10px",
+                          background: "yellow",
+                        },
+                      },
+                      "Yes 💖"
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: moveNoButton,
+                        style: {
+                          padding: "10px 20px",
+                          margin: "10px",
+                          background: "#eee",
+                          transform: `translate(${noPos.x}px, ${noPos.y}px)`,
+                          transition: "transform 0.2s",
+                        },
+                      },
+                      NO_PHRASES[Math.min(noCount, NO_PHRASES.length - 1)]
+                    )
+                  )
+                )
+              : React.createElement(
+                  React.Fragment,
+                  null,
+                  React.createElement("img", {
+                    src: "https://media.tenor.com/f1xnRxTRxLAAAAAj/bears-with-kisses-bg.gif",
+                    width: 200,
+                  }),
+                  React.createElement(
+                    "h1",
+                    { style: { color: "hotpink", fontSize: "48px" } },
+                    "YAYYYY!!! 💕"
+                  )
+                )
+          )
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        React.createElement(App)
+      );
+    </script>
+  </body>
+</html>
